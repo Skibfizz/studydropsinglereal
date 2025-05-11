@@ -1,6 +1,6 @@
 # StudyDrop Humanizer
 
-A text humanization tool that uses AI to make machine-generated content sound more human. This project is a clone of [NaturalWrite](https://naturalwrite.com/) with a focus on the text humanization feature.
+A text humanization tool that uses AI to make machine-generated content sound more human. Available at [Studydrop.io](https://studydrop.io). This project is a clone of [NaturalWrite](https://naturalwrite.com/) with a focus on the text humanization feature.
 
 ## Features
 

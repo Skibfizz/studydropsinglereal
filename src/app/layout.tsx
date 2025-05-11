@@ -10,6 +10,21 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "StudyDrop Humanizer",
   description: "AI text humanizer tool",
+  metadataBase: new URL('https://studydrop.io'),
+  authors: [{ name: 'StudyDrop Team' }],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://studydrop.io',
+    title: 'StudyDrop Humanizer',
+    description: 'AI text humanizer tool',
+    siteName: 'StudyDrop',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'StudyDrop Humanizer',
+    description: 'AI text humanizer tool',
+  },
 };
 
 export default function RootLayout({
