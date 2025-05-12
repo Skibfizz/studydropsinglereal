@@ -6,11 +6,12 @@ export default function Home() {
 			<div className='container mx-auto px-4 py-12 flex-1 flex flex-col items-center'>
 				<div className='max-w-3xl w-full text-center mb-12'>
 					<h2 className='text-4xl font-bold mb-4'>
-						Humanize AI Text & Outsmart AI Detectors
+						Make AI Content Undetectable in Seconds
 					</h2>
 					<p className='text-xl text-gray-600'>
-						Transform AI-generated content into natural human-like text with
-						our advanced humanizing technology.
+						Our advanced humanizer bypasses AI detection tools by transforming 
+						computer-generated text into authentic, human-like writing that professors 
+						and AI detectors can't distinguish from real human work.
 					</p>
 				</div>
 
