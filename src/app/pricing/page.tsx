@@ -18,10 +18,14 @@ const PRICING_PLANS = [
 		monthlyPrice: 5.99,
 		annualPrice: 50, // Flat annual price
 		features: [
+			'Maximum 500 words per request',
 			'5,000 words per month',
 			'Enhanced humanization quality',
-			'Maximum 500 words per request',
-			'Priority support',
+			'100% Original Content',
+			'Flawless Rewrites, No Typos',
+			'Passes All AI & Plagiarism Checks',
+			'Unlimited AI Detection Scans',
+			'Supports 20+ Languages'
 		],
 		monthlyStripePriceId: 'price_1RNekUHgxuRkr4erU5JAMHDW',
 		annualStripePriceId: 'price_1RNgs0HgxuRkr4er2mlEkigH',
@@ -33,11 +37,14 @@ const PRICING_PLANS = [
 		monthlyPrice: 15.99,
 		annualPrice: 130, // Flat annual price
 		features: [
+			'Maximum 2,000 words per request',
 			'12,000 words per month',
 			'Premium humanization quality',
-			'Maximum 2,000 words per request',
-			'Priority support',
-			'Custom tone settings',
+			'100% Original Content',
+			'Flawless Rewrites, No Typos',
+			'Passes All AI & Plagiarism Checks',
+			'Unlimited AI Detection Scans',
+			'Supports 20+ Languages'
 		],
 		monthlyStripePriceId: 'price_1RNekWHgxuRkr4erYHsBIi8J',
 		annualStripePriceId: 'price_1RNgs0HgxuRkr4er2mlEkigH',
@@ -49,13 +56,14 @@ const PRICING_PLANS = [
 		monthlyPrice: 29.99,
 		annualPrice: 245, // Flat annual price
 		features: [
+			'Maximum 5,000 words per request',
 			'30,000 words per month',
 			'Ultimate humanization quality',
-			'Maximum 5,000 words per request',
-			'Priority support',
-			'Custom tone & style settings',
-			'API access',
-			'Advanced analytics'
+			'100% Original Content',
+			'Flawless Rewrites, No Typos',
+			'Passes All AI & Plagiarism Checks',
+			'Unlimited AI Detection Scans',
+			'Supports 20+ Languages'
 		],
 		monthlyStripePriceId: 'price_1RNekaHgxuRkr4erxRTzT4wB',
 		annualStripePriceId: 'price_1RNgs5HgxuRkr4erHAS3knLs',
@@ -117,7 +125,7 @@ export default function PricingPage() {
 	return (
 		<main className='min-h-screen flex flex-col'>
 			<div className='container mx-auto px-4 py-12 flex-1'>
-				<div className='max-w-4xl mx-auto'>
+				<div className='max-w-7xl mx-auto'>
 					<div className='text-center mb-12'>
 						<h2 className='text-4xl font-bold mb-4'>Pricing Plans</h2>
 						<p className='text-xl text-gray-600 mb-8'>
@@ -140,7 +148,7 @@ export default function PricingPage() {
 						</div>
 					</div>
 
-					<div className='grid md:grid-cols-3 gap-8'>
+					<div className='grid lg:grid-cols-3 md:grid-cols-2 gap-8'>
 						{PRICING_PLANS.map((plan) => (
 							<Card key={plan.id} className='flex flex-col'>
 								<CardHeader>
@@ -159,7 +167,7 @@ export default function PricingPage() {
 											</div>
 										)}
 									</div>
-									<ul className='space-y-2'>
+									<ul className='space-y-4'>
 										{plan.features.map((feature, index) => (
 											<li key={index} className='flex items-center'>
 												<svg
