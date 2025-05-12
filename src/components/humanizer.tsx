@@ -26,6 +26,9 @@ export function Humanizer() {
 	const [isHumanizing, setIsHumanizing] = useState(false)
 	const [humanizedText, setHumanizedText] = useState('')
 	const [wordCount, setWordCount] = useState(0)
+	const [wordLimitExceeded, setWordLimitExceeded] = useState(false)
+	const [wordLimit, setWordLimit] = useState(250) // Default to 250, will be updated from API
+	const [isLoadingLimit, setIsLoadingLimit] = useState(true)
 	const router = useRouter()
 
 	// Initialize form
@@ -36,6 +39,27 @@ export function Humanizer() {
 		},
 		mode: 'onSubmit', // Only validate on submit
 	})
+	
+	// Fetch word limit on mount
+	useEffect(() => {
+		async function fetchWordLimit() {
+			try {
+				const response = await fetch('/api/subscription')
+				if (response.ok) {
+					const data = await response.json()
+					if (data.usage && data.usage.limit) {
+						setWordLimit(data.usage.limit)
+					}
+				}
+			} catch (error) {
+				console.error('Error fetching word limit:', error)
+			} finally {
+				setIsLoadingLimit(false)
+			}
+		}
+		
+		fetchWordLimit()
+	}, [])
 
 	// Read from localStorage on mount
 	useEffect(() => {
@@ -71,6 +95,7 @@ export function Humanizer() {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			setIsHumanizing(true)
+			setWordLimitExceeded(false)
 			
 			// API call to humanize text
 			const response = await fetch('/api/humanize', {
@@ -85,6 +110,14 @@ export function Humanizer() {
 				// User is not authenticated
 				toast.error('Please sign in to humanize text')
 				router.push('/auth/signin')
+				return
+			}
+
+			if (response.status === 403) {
+				// Word limit exceeded
+				const data = await response.json()
+				setWordLimitExceeded(true)
+				toast.error('Word limit exceeded for your plan')
 				return
 			}
 
@@ -129,7 +162,7 @@ export function Humanizer() {
 									<div className='flex justify-between items-center'>
 										<h3 className='text-lg font-medium'>Your Text</h3>
 										<span className='text-sm text-gray-500'>
-											{wordCount} / 250 words
+											{wordCount} / {isLoadingLimit ? '...' : wordLimit} words
 										</span>
 									</div>
 								</CardHeader>
@@ -154,6 +187,11 @@ export function Humanizer() {
 													<FormMessage className="text-red-500">
 														Minimum 50 words required
 													</FormMessage>
+												)}
+												{wordLimitExceeded && (
+													<p className="text-red-500 mt-2 font-medium">
+														You have reached your word limit for this month. Please upgrade your plan for more words.
+													</p>
 												)}
 											</FormItem>
 										)}
