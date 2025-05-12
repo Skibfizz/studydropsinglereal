@@ -14,9 +14,18 @@ export const Header = () => {
   if (pathname.startsWith('/auth/')) return null
 
   return (
-    <header className='w-full py-4 border-b'>
+    <header className='w-full py-6 border-b border-gray-400'>
       <div className='container mx-auto px-4 flex justify-between items-center'>
-        <Link href="/">
+        <Link href="/" className='flex items-center gap-2'>
+          <div className='relative w-8 h-8'>
+            <Image 
+              src="/mascot.png" 
+              alt="StudyDrop Mascot" 
+              width={32} 
+              height={32}
+              className="object-contain"
+            />
+          </div>
           <h1 className='text-2xl font-bold'>StudyDrop</h1>
         </Link>
         <nav>
