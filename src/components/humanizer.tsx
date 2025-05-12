@@ -155,11 +155,6 @@ export function Humanizer() {
 		}
 	}
 
-	const handleCheckForAI = () => {
-		// This would integrate with an AI detection API in a real app
-		toast.info('AI text detection would be implemented here')
-	}
-
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(humanizedText)
 		toast.success('Copied to clipboard!')
@@ -206,14 +201,7 @@ export function Humanizer() {
 										)}
 									/>
 								</CardContent>
-								<CardFooter className='flex justify-between'>
-									<Button
-										type='button'
-										variant='outline'
-										onClick={handleCheckForAI}
-									>
-										Check for AI
-									</Button>
+								<CardFooter className='flex justify-end'>
 									<Button type='submit' disabled={isHumanizing}>
 										{isHumanizing ? 'Humanizing...' : 'Humanize'}
 									</Button>

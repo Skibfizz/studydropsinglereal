@@ -1,18 +1,23 @@
 import { Humanizer } from '@/components/humanizer'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
 	return (
 		<main className='min-h-screen flex flex-col items-center'>
 			<div className='container mx-auto px-4 py-12 flex-1 flex flex-col items-center'>
-				<div className='max-w-3xl w-full text-center mb-12'>
+				<div className='max-w-3xl w-full text-center mb-8'>
 					<h2 className='text-4xl font-bold mb-4'>
 						Make AI Content Undetectable in Seconds
 					</h2>
-					<p className='text-xl text-gray-600'>
+					<p className='text-xl text-gray-600 mb-6'>
 						Our advanced humanizer bypasses AI detection tools by transforming 
-						computer-generated text into authentic, human-like writing that professors 
-						and AI detectors can't distinguish from real human work.
+						computer-generated text into authentic, human-like writing 
 					</p>
+					
+					<Button asChild className="text-2xl px-12 py-8 mb-8 rounded-xl">
+						<Link href="/pricing">Humanize More</Link>
+					</Button>
 				</div>
 
 				<Humanizer />
