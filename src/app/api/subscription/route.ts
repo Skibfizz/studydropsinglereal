@@ -35,7 +35,7 @@ export async function GET() {
     }
 
     // Calculate usage limits based on plan type
-    let limit = 1000 // Default free tier limit (words)
+    let limit = 250 // Default free tier limit (words)
     if (subscription?.plan_type === 'beginner') limit = 5000
     else if (subscription?.plan_type === 'pro') limit = 25000
     else if (subscription?.plan_type === 'ultimate') limit = 100000
@@ -50,7 +50,7 @@ export async function GET() {
 
     const { data: usageData, error: usageError } = await supabase
       .from('usage_limits')
-      .select('word_count')
+      .select('*')
       .eq('user_id', session.user.id)
       .gte('period_start', startOfMonth)
       .lte('period_end', endOfMonth)
@@ -78,6 +78,29 @@ export async function GET() {
       if (createError) {
         console.error('Error creating usage period:', createError)
         return NextResponse.json({ error: 'Failed to initialize usage tracking' }, { status: 500 })
+      }
+    } 
+    // If user is on free tier and max_words_allowed is not 250, update it
+    else if ((!subscription || subscription?.plan_type === 'free') && 
+             usageData && 
+             typeof usageData.max_words_allowed === 'number' && 
+             usageData.max_words_allowed !== 250) {
+      console.log('Updating word limit for free tier user:', {
+        userId: session.user.id,
+        currentLimit: usageData.max_words_allowed,
+        newLimit: 250
+      })
+      
+      const { error: updateError } = await supabase
+        .from('usage_limits')
+        .update({
+          max_words_allowed: 250,
+          updated_at: now.toISOString()
+        })
+        .eq('id', usageData.id)
+
+      if (updateError) {
+        console.error('Error updating word limit:', updateError)
       }
     }
 

@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 			.single()
 
 		// Calculate word limits based on plan
-		let wordLimit = 1000 // Free tier
+		let wordLimit = 250 // Free tier
 		if (subscription?.plan_type === 'beginner') wordLimit = 5000
 		else if (subscription?.plan_type === 'pro') wordLimit = 25000
 		else if (subscription?.plan_type === 'ultimate') wordLimit = 100000

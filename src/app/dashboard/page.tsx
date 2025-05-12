@@ -68,8 +68,69 @@ export default function DashboardPage() {
 
 	if (loading || isLoading) {
 		return (
-			<main className='min-h-screen flex flex-col items-center justify-center p-4'>
-				<p>Loading...</p>
+			<main className='min-h-screen flex flex-col'>
+				<div className='container mx-auto px-4 py-12 flex-1'>
+					<div className='max-w-5xl mx-auto'>
+						{/* Account Info Skeleton */}
+						<Card className="w-full mb-6">
+							<CardHeader>
+								<div className="h-7 w-40 bg-gray-200 animate-pulse rounded"></div>
+								<div className="h-5 w-32 bg-gray-200 animate-pulse rounded mt-1"></div>
+							</CardHeader>
+							<CardContent>
+								<div className="h-8 w-48 bg-gray-200 animate-pulse rounded mb-2"></div>
+								<div className="h-5 w-56 bg-gray-200 animate-pulse rounded mb-4"></div>
+								<div className="mt-4">
+									<div className="h-10 w-28 bg-gray-200 animate-pulse rounded"></div>
+								</div>
+							</CardContent>
+						</Card>
+
+						{/* Two boxes side by side */}
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-12'>
+							{/* Usage Skeleton */}
+							<Card>
+								<CardHeader>
+									<div className="h-7 w-20 bg-gray-200 animate-pulse rounded"></div>
+									<div className="h-5 w-36 bg-gray-200 animate-pulse rounded mt-1"></div>
+								</CardHeader>
+								<CardContent>
+									<div className="h-9 w-24 bg-gray-200 animate-pulse rounded mb-2"></div>
+									<div className="h-5 w-40 bg-gray-200 animate-pulse rounded mb-2"></div>
+									<div className="h-4 w-64 bg-gray-200 animate-pulse rounded mt-2"></div>
+								</CardContent>
+							</Card>
+							
+							{/* Subscription Skeleton */}
+							<Card>
+								<CardHeader>
+									<div className="h-7 w-32 bg-gray-200 animate-pulse rounded"></div>
+									<div className="h-5 w-28 bg-gray-200 animate-pulse rounded mt-1"></div>
+								</CardHeader>
+								<CardContent className='space-y-4'>
+									<div>
+										<div className="h-8 w-32 bg-gray-200 animate-pulse rounded mb-2"></div>
+										<div className="h-5 w-24 bg-gray-200 animate-pulse rounded"></div>
+									</div>
+									<div className="h-10 w-36 bg-gray-200 animate-pulse rounded"></div>
+								</CardContent>
+							</Card>
+						</div>
+					</div>
+				</div>
+
+				<footer className='w-full py-4 border-t'>
+					<div className='container mx-auto px-4'>
+						<div className='flex justify-center items-center space-x-4'>
+							{[1, 2, 3, 4].map(i => (
+								<div key={i} className="h-4 w-16 bg-gray-200 animate-pulse rounded"></div>
+							))}
+						</div>
+						<div className='text-center mt-2'>
+							<div className="h-4 w-48 bg-gray-200 animate-pulse rounded mx-auto"></div>
+						</div>
+					</div>
+				</footer>
 			</main>
 		)
 	}
