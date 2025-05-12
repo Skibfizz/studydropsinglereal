@@ -47,11 +47,25 @@ export async function POST(request: Request) {
 			.eq('user_id', session.user.id)
 			.single()
 
-		// Calculate word limits based on plan
-		let wordLimit = 250 // Free tier
-		if (subscription?.plan_type === 'beginner') wordLimit = 5000
-		else if (subscription?.plan_type === 'pro') wordLimit = 25000
-		else if (subscription?.plan_type === 'ultimate') wordLimit = 100000
+		// Define per-request word limits
+		let perRequestWordLimit = 250 // Free tier
+		if (subscription?.plan_type === 'beginner') perRequestWordLimit = 500
+		else if (subscription?.plan_type === 'pro') perRequestWordLimit = 2000
+		else if (subscription?.plan_type === 'ultimate') perRequestWordLimit = 5000
+
+		// Check if text exceeds the per-request word limit
+		if (wordCount > perRequestWordLimit) {
+			return NextResponse.json(
+				{ error: `Text exceeds the ${perRequestWordLimit} word limit for your plan` },
+				{ status: 403 }
+			)
+		}
+
+		// Calculate monthly word limits based on plan
+		let monthlyWordLimit = 250 // Free tier
+		if (subscription?.plan_type === 'beginner') monthlyWordLimit = 5000
+		else if (subscription?.plan_type === 'pro') monthlyWordLimit = 25000
+		else if (subscription?.plan_type === 'ultimate') monthlyWordLimit = 100000
 
 		// Get current usage period
 		const now = new Date()
@@ -73,7 +87,7 @@ export async function POST(request: Request) {
 				.insert({
 					user_id: session.user.id,
 					word_count: 0,
-					max_words_allowed: wordLimit,
+					max_words_allowed: monthlyWordLimit,
 					period_start: startOfMonth,
 					period_end: endOfMonth,
 					created_at: now.toISOString(),
@@ -91,11 +105,11 @@ export async function POST(request: Request) {
 			}
 		}
 
-		// Check if user has exceeded their word limit
+		// Check if user has exceeded their monthly word limit
 		const currentWordCount = ((currentUsage?.word_count || 0) + wordCount)
-		if (currentWordCount > wordLimit) {
+		if (currentWordCount > monthlyWordLimit) {
 			return NextResponse.json(
-				{ error: 'Word limit exceeded for your plan' },
+				{ error: 'Monthly word limit exceeded for your plan' },
 				{ status: 403 }
 			)
 		}

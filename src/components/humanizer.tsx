@@ -26,9 +26,7 @@ export function Humanizer() {
 	const [isHumanizing, setIsHumanizing] = useState(false)
 	const [humanizedText, setHumanizedText] = useState('')
 	const [wordCount, setWordCount] = useState(0)
-	const [wordLimitExceeded, setWordLimitExceeded] = useState(false)
-	const [wordLimit, setWordLimit] = useState(250) // Default to 250, will be updated from API
-	const [isLoadingLimit, setIsLoadingLimit] = useState(true)
+	const [maxWordsPerRequest, setMaxWordsPerRequest] = useState(250) // Default to free tier
 	const router = useRouter()
 
 	// Initialize form
@@ -39,26 +37,38 @@ export function Humanizer() {
 		},
 		mode: 'onSubmit', // Only validate on submit
 	})
-	
-	// Fetch word limit on mount
+
+	// Fetch user subscription data
 	useEffect(() => {
-		async function fetchWordLimit() {
+		const fetchSubscription = async () => {
 			try {
 				const response = await fetch('/api/subscription')
-				if (response.ok) {
-					const data = await response.json()
-					if (data.usage && data.usage.limit) {
-						setWordLimit(data.usage.limit)
+				if (!response.ok) return
+				
+				const data = await response.json()
+				
+				// Set max words per request from the API response
+				if (data.usage && data.usage.per_request_limit) {
+					setMaxWordsPerRequest(data.usage.per_request_limit)
+				} else {
+					// Fallback logic if per_request_limit is not available
+					const planType = data.subscription?.plan_type || 'free'
+					if (planType === 'beginner') {
+						setMaxWordsPerRequest(500)
+					} else if (planType === 'pro') {
+						setMaxWordsPerRequest(2000)
+					} else if (planType === 'ultimate') {
+						setMaxWordsPerRequest(5000)
+					} else {
+						setMaxWordsPerRequest(250) // Free tier
 					}
 				}
 			} catch (error) {
-				console.error('Error fetching word limit:', error)
-			} finally {
-				setIsLoadingLimit(false)
+				console.error('Error fetching subscription:', error)
 			}
 		}
 		
-		fetchWordLimit()
+		fetchSubscription()
 	}, [])
 
 	// Read from localStorage on mount
@@ -93,9 +103,14 @@ export function Humanizer() {
 
 	// Handle form submission
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		// Check if text exceeds the word limit for the current plan
+		if (wordCount > maxWordsPerRequest) {
+			toast.error(`Text exceeds the ${maxWordsPerRequest} word limit for your plan. Please reduce the text or upgrade your plan.`)
+			return
+		}
+		
 		try {
 			setIsHumanizing(true)
-			setWordLimitExceeded(false)
 			
 			// API call to humanize text
 			const response = await fetch('/api/humanize', {
@@ -112,12 +127,11 @@ export function Humanizer() {
 				router.push('/auth/signin')
 				return
 			}
-
+			
 			if (response.status === 403) {
-				// Word limit exceeded
-				const data = await response.json()
-				setWordLimitExceeded(true)
-				toast.error('Word limit exceeded for your plan')
+				// Handle limit exceeded errors
+				const error = await response.json()
+				toast.error(error.error || 'Word limit exceeded. Please upgrade your plan.')
 				return
 			}
 
@@ -162,7 +176,7 @@ export function Humanizer() {
 									<div className='flex justify-between items-center'>
 										<h3 className='text-lg font-medium'>Your Text</h3>
 										<span className='text-sm text-gray-500'>
-											{wordCount} / {isLoadingLimit ? '...' : wordLimit} words
+											{wordCount} / {maxWordsPerRequest} words
 										</span>
 									</div>
 								</CardHeader>
@@ -187,11 +201,6 @@ export function Humanizer() {
 													<FormMessage className="text-red-500">
 														Minimum 50 words required
 													</FormMessage>
-												)}
-												{wordLimitExceeded && (
-													<p className="text-red-500 mt-2 font-medium">
-														You have reached your word limit for this month. Please upgrade your plan for more words.
-													</p>
 												)}
 											</FormItem>
 										)}

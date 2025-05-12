@@ -35,10 +35,19 @@ export async function GET() {
     }
 
     // Calculate usage limits based on plan type
-    let limit = 250 // Default free tier limit (words)
-    if (subscription?.plan_type === 'beginner') limit = 5000
-    else if (subscription?.plan_type === 'pro') limit = 25000
-    else if (subscription?.plan_type === 'ultimate') limit = 100000
+    let monthlyLimit = 250 // Default free tier limit (words)
+    let perRequestLimit = 250 // Default free tier per-request limit
+
+    if (subscription?.plan_type === 'beginner') {
+      monthlyLimit = 5000
+      perRequestLimit = 500
+    } else if (subscription?.plan_type === 'pro') {
+      monthlyLimit = 25000
+      perRequestLimit = 2000
+    } else if (subscription?.plan_type === 'ultimate') {
+      monthlyLimit = 100000
+      perRequestLimit = 5000
+    }
 
     // For new users or those without a subscription, return free tier defaults
     const defaultSubscription = { plan_type: 'free', status: 'active' }
@@ -68,7 +77,7 @@ export async function GET() {
         .insert({
           user_id: session.user.id,
           word_count: 0,
-          max_words_allowed: limit,
+          max_words_allowed: monthlyLimit,
           period_start: startOfMonth,
           period_end: endOfMonth,
           created_at: now.toISOString(),
@@ -108,7 +117,8 @@ export async function GET() {
       subscription: subscription || defaultSubscription,
       usage: {
         used: usageData?.word_count || 0,
-        limit,
+        limit: monthlyLimit,
+        per_request_limit: perRequestLimit,
         period_start: startOfMonth,
         period_end: endOfMonth
       }
