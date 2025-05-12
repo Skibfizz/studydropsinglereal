@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/components/providers/auth-provider'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
@@ -28,6 +29,7 @@ export function Humanizer() {
 	const [wordCount, setWordCount] = useState(0)
 	const [maxWordsPerRequest, setMaxWordsPerRequest] = useState(250) // Default to free tier
 	const router = useRouter()
+	const { user } = useAuth()
 
 	// Initialize form
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -103,6 +105,13 @@ export function Humanizer() {
 
 	// Handle form submission
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		// Check if user is logged in
+		if (!user) {
+			// Redirect to sign in page if not authenticated
+			router.push('/auth/signin')
+			return;
+		}
+		
 		// Check if text exceeds the word limit for the current plan
 		if (wordCount > maxWordsPerRequest) {
 			toast.error(`Text exceeds the ${maxWordsPerRequest} word limit for your plan. Please reduce the text or upgrade your plan.`)
@@ -190,6 +199,11 @@ export function Humanizer() {
 															field.onChange(e)
 															handleInputChange(e)
 														}}
+														onFocus={() => {
+															if (!user) {
+																router.push('/auth/signin')
+															}
+														}}
 													/>
 												</FormControl>
 												{form.formState.isSubmitted && (
@@ -202,7 +216,16 @@ export function Humanizer() {
 									/>
 								</CardContent>
 								<CardFooter className='flex justify-end'>
-									<Button type='submit' disabled={isHumanizing}>
+									<Button 
+										type='submit' 
+										disabled={isHumanizing}
+										onClick={(e) => {
+											if (!user) {
+												e.preventDefault();
+												router.push('/auth/signin');
+											}
+										}}
+									>
 										{isHumanizing ? 'Humanizing...' : 'Humanize'}
 									</Button>
 								</CardFooter>
