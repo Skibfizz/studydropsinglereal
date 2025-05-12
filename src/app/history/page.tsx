@@ -44,7 +44,7 @@ export default async function HistoryPage() {
             <Link href='/pricing' className='text-sm hover:underline'>
               Pricing
             </Link>
-            <Link href='/contact' className='text-sm hover:underline'>
+            <Link href='mailto:help@studydrop.io' className='text-sm hover:underline'>
               Contact
             </Link>
             <Link href='/privacy' className='text-sm hover:underline'>

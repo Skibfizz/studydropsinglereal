@@ -212,7 +212,7 @@ export default function PricingPage() {
 						<a href='/pricing' className='text-sm hover:underline'>
 							Pricing
 						</a>
-						<a href='/contact' className='text-sm hover:underline'>
+						<a href='mailto:help@studydrop.io' className='text-sm hover:underline'>
 							Contact
 						</a>
 						<a href='/privacy' className='text-sm hover:underline'>

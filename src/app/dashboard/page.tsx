@@ -173,11 +173,6 @@ export default function DashboardPage() {
 									{usage.used} / {usage.limit}
 								</p>
 								<p className='text-gray-500'>Words used this month</p>
-								{usage.used >= usage.limit && (
-									<p className='text-red-500 font-medium mt-2'>
-										You have reached your word limit for this month. Please upgrade your plan for more words.
-									</p>
-								)}
 								<p className='text-sm text-gray-400 mt-2'>
 									Period: {new Date(usage.period_start).toLocaleDateString()} - {new Date(usage.period_end).toLocaleDateString()}
 								</p>
@@ -212,7 +207,7 @@ export default function DashboardPage() {
 						<a href='/pricing' className='text-sm hover:underline'>
 							Pricing
 						</a>
-						<a href='/contact' className='text-sm hover:underline'>
+						<a href='mailto:help@studydrop.io' className='text-sm hover:underline'>
 							Contact
 						</a>
 						<a href='/privacy' className='text-sm hover:underline'>

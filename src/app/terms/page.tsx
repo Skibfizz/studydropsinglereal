@@ -67,7 +67,7 @@ export default function TermsOfService() {
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">9. Contact Information</h2>
-          <p>For questions about these Terms of Service, please contact us.</p>
+          <p>For questions about these Terms of Service, please contact us at <a href="mailto:help@studydrop.io" className="text-blue-600 hover:underline">help@studydrop.io</a>.</p>
         </section>
       </div>
     </div>

@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">6. Contact Us</h2>
-          <p>If you have questions about this Privacy Policy, please contact us.</p>
+          <p>If you have questions about this Privacy Policy, please contact us at <a href="mailto:help@studydrop.io" className="text-blue-600 hover:underline">help@studydrop.io</a>.</p>
         </section>
       </div>
     </div>
