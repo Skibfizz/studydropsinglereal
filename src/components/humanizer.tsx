@@ -199,11 +199,6 @@ export function Humanizer() {
 															field.onChange(e)
 															handleInputChange(e)
 														}}
-														onFocus={() => {
-															if (!user) {
-																router.push('/auth/signin')
-															}
-														}}
 													/>
 												</FormControl>
 												{form.formState.isSubmitted && (
